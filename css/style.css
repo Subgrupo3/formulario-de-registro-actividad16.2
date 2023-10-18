@@ -2,6 +2,13 @@
   max-width: 960px;
 }
 
-input:invalid {
+.alert {
+  position: fixed;
+  top: 80px;
+  width: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+.is-invalid {
   border: 2px solid red;
 }

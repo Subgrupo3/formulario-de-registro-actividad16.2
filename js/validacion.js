@@ -1,122 +1,135 @@
-document.addEventListener("DOMContentLoaded", function() {
-// Selecciona el formulario por su id "formRegistro"
-let form = document.querySelector("form");
+function showAlertSuccess() {
+  document.getElementById("alert-success").classList.add("show");
+}
 
-form.addEventListener("submit", function (event) {
-  let obligatorios = document.getElementsByClassName("form-control");
+function showAlertError() {
+  document.getElementById("alert-danger").classList.add("show");
+}
 
-  for (let i = 0; i < obligatorios.length; i++) {
-    if (obligatorios[i].value === "") {
-      obligatorios[i].classList.add("is-invalid"); // Cambia la clase para aplicar el estilo de validación
-      event.preventDefault(); // Evita que se envíe el formulario
-    }
-    else{
-        obligatorios[i].classList.remove("is-invalid");
-    }
-  }
-   const inputFields = document.getElementsByClassName("form-control");
+function confContraseña() {
+  var password1 = document.getElementById("password1").value;
+  var password2 = document.getElementById("password2").value;
+  var terminos = document.getElementById("terminos"); 
 
-   for (let i = 0; i < inputFields.length; i++) {
-     inputFields[i].addEventListener("input", function (event) {
-       if (inputFields[i].value === "") {
-         inputFields[i].classList.add("is-invalid"); // Agrega la clase de validación
-       } else {
-         inputFields[i].classList.remove("is-invalid"); // Elimina la clase de validación
-       }
-     });
-   }
-
-    const contrasenia = document.getElementById("password1");
-    const psw2 = document.getElementById("password2");
-    
-    if (contrasenia.value != psw2.value) {
-        psw2.classList.add("is-invalid");
+  if (terminos.checked) {
+    if (password2 === password1 && password1.length >= 6) {
+      showAlertSuccess();
+      document.getElementById("terminosText").classList.add("text-success");
     } else {
-        psw2.classList.remove("is-invalid"); // Elimina la clase de validación
-      
+      showAlertError();
+      return false
     }
-
-    var terminos = document.getElementById('terminos');
-    var tituloTerminos = document.getElementById("terminosTitulo");
-
-    if(!(terminos.checked)){
-        terminos.classList.add("is-invalid");
-        tituloTerminos.classList.add("is-invalid");
-        tituloTerminos.classList.add("text-danger");
-    } else{
-        terminos.classList.remove("is-invalid");
-        tituloTerminos.classList.remove("is-invalid");
-        tituloTerminos.classList.remove("text-danger");
-        terminos.classList.add("text-success");
-    }
-
-});
-
-var terminos = document.getElementById('terminos');
-terminos.addEventListener("change", function(){
-    if(!(terminos.checked)){
-        terminos.classList.add("is-invalid");
-        tituloTerminos.classList.add("is-invalid");
-        tituloTerminos.classList.add("text-danger");
-    } else{
-        terminos.classList.remove("is-invalid");
-        tituloTerminos.classList.remove("is-invalid");
-        tituloTerminos.classList.remove("text-danger");
-        terminos.classList.add("text-success");
-    }
-})
-
-const email = document.getElementById("email");
-const emailError = document.querySelector("#mail + span.error");
-
-email.addEventListener("input", function (event) {
-  // Cada vez que el usuario escribe algo, verificamos si
-  // los campos del formulario son válidos.
-
-  if (email.validity.valid) {
-    // En caso de que haya un mensaje de error visible, si el campo
-    // es válido, eliminamos el mensaje de error.
-    emailError.innerHTML = ""; // Restablece el contenido del mensaje
-    emailError.className = "error"; // Restablece el estado visual del mensaje
   } else {
-    // Si todavía hay un error, muestra el error exacto
-    showError();
+    showAlertError();
+    document.getElementById("terminosText").classList.remove("text-success");
+    return false
   }
-  if (!email.validity.valid) {
-   showError();
-    // Eevitamos que se envíe el formulario cancelando el evento
-    event.preventDefault();
-  }
+}
 
-});
+document.addEventListener("DOMContentLoaded", function() {
+  let form = document.getElementById('passwordForm');
+  let email = document.getElementById('email');
+  let password1 = document.getElementById('password1');
+  let password2 = document.getElementById('password2');
+  let terminos = document.getElementById('terminos');
+  let nombre = document.getElementById('nombre');
+  let apellido = document.getElementById('apellido');
 
-const contrasenia = document.getElementById("password1");
-  const contraseniaError = document.querySelector("#password1 + span.error");
+  form.addEventListener("submit", function(event) {
+    let valid = true;
 
-  if (contrasenia.validity.tooShort) {
-    // Si los datos son demasiado cortos
-    // muestra el mensaje de error siguiente.
-    contraseniaError.textContent =
-      "La contaseña debe tener al menos ${contrasenia.minLength} caracteres; ha introducido ${contrasenia.value.length }.";
-  }
-
-function showError() {
-    if (email.validity.valueMissing) {
-      // Si el campo está vacío
-      // muestra el mensaje de error siguiente.
-      emailError.textContent =
-        "Debe introducir una dirección de correo electrónico.";
-    } else if (email.validity.typeMismatch) {
-      // Si el campo no contiene una dirección de correo electrónico
-      // muestra el mensaje de error siguiente.
-      emailError.textContent =
-        "El valor introducido debe ser una dirección de correo electrónico.";
-    } else if (email.validity.tooShort) {
-      // Si los datos son demasiado cortos
-      // muestra el mensaje de error siguiente.
-      emailError.textContent =
-        "El correo electrónico debe tener al menos ${ email.minLength } caracteres; ha introducido ${ email.value.length }.";
+    if (!email.value || !email.validity.valid) {
+      valid = false;
+      email.classList.add('is-invalid');
+    } else {
+      email.classList.remove('is-invalid');
     }
-}  
 
-})
+    if (!nombre.value) {
+      valid = false;
+      nombre.classList.add('is-invalid');
+    } else {
+      nombre.classList.remove('is-invalid');
+    }
+
+    if (!apellido.value) {
+      valid = false;
+      apellido.classList.add('is-invalid');
+    } else {
+      apellido.classList.remove('is-invalid');
+    }
+
+    if (!password1.value || password1.value.length < 6) {
+      valid = false;
+      password1.classList.add('is-invalid');
+    } else {
+      password1.classList.remove('is-invalid');
+    }
+
+    if (!password2.value || password1.value !== password2.value || password2.value.length < 6) {
+      valid = false;
+      password2.classList.add('is-invalid');
+    } else {
+      password2.classList.remove('is-invalid');
+    }
+
+    if (!terminos.checked) {
+      valid = false;
+      terminos.classList.add('is-invalid');
+    } else {
+      terminos.classList.remove('is-invalid');
+    }
+
+    if (!valid) {
+      
+      document.getElementById('alert-danger').classList.add('show');
+      
+    } else {
+      document.getElementById('alert-success').classList.add('show');
+    }
+    event.preventDefault();
+   
+  });
+
+  function applyValidationStyles(inputElement) {
+    if (inputElement.value) {
+      inputElement.classList.remove('is-invalid');
+      inputElement.classList.add('is-valid');
+    } else {
+      inputElement.classList.add('is-invalid');
+      inputElement.classList.remove('is-valid');
+    }
+  }
+
+  email.addEventListener("input", function() {
+    applyValidationStyles(email);
+  });
+
+  nombre.addEventListener("input", function() {
+    applyValidationStyles(nombre);
+  });
+
+  apellido.addEventListener("input", function() {
+    applyValidationStyles(apellido);
+  });
+
+  password1.addEventListener("input", function() {
+    applyValidationStyles(password1);
+  });
+
+  password2.addEventListener("input", function() {
+    applyValidationStyles(password2);
+  });
+
+  terminos.addEventListener("change", function() {
+    if (terminos.checked) {
+      terminos.classList.remove('is-invalid');
+      terminos.classList.add('is-valid');
+      terminosText.classList.add("text-success");
+    } else {
+      terminos.classList.add('is-invalid');
+      terminos.classList.remove('is-valid');
+      document.getElementById("terminosText").classList.remove("text-success");
+    }
+  });
+});
